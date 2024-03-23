@@ -1,10 +1,12 @@
 using Catalog.API.Products.CreateProduct;
+using Catalog.API.Products.GetProducts;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCarter(configurator: c =>
 {
     c.WithModule<CreateProductEndpoint>();
+    c.WithModule<GetProductsEndpoint>();
 });
 
 builder.Services.AddMediatR(config =>
