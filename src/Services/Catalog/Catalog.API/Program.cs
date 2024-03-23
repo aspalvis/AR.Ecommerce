@@ -7,6 +7,7 @@ builder.Services.AddCarter(configurator: c =>
 {
     c.WithModule<CreateProductEndpoint>();
     c.WithModule<GetProductsEndpoint>();
+    c.WithModule<GetProductByIdEndpoint>();
 });
 
 builder.Services.AddMediatR(config =>
