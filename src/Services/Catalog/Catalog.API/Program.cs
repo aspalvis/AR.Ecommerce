@@ -1,19 +1,10 @@
-using Catalog.API.Products.CreateProduct;
-using Catalog.API.Products.DeleteProducts;
-using Catalog.API.Products.GetProductByCategory;
-using Catalog.API.Products.GetProducts;
-using Catalog.API.Products.UpdateProduct;
+using Catalog.API.Products;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCarter(configurator: c =>
 {
-    c.WithModule<CreateProductEndpoint>();
-    c.WithModule<GetProductsEndpoint>();
-    c.WithModule<GetProductByIdEndpoint>();
-    c.WithModule<GetProductByCategoryEndpoint>();
-    c.WithModule<UpdateProductEndpoint>();
-    c.WithModule<DeleteProductEndpoint>();
+    c.WithProductEndpoints();
 });
 
 builder.Services.AddMediatR(config =>
