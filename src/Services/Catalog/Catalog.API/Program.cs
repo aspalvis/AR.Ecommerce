@@ -1,25 +1,34 @@
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddCarter(configurator: c =>
+IServiceCollection services = builder.Services;
+IWebHostEnvironment environment = builder.Environment;
+ConfigurationManager configuration = builder.Configuration;
+
+services.AddCarter(configurator: c =>
 {
     c.WithProductEndpoints();
 });
 
-builder.Services.AddMediatR(config =>
+services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(typeof(Program).Assembly);
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
     config.AddOpenBehavior(typeof(LoggingBehavior<,>));
 });
 
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+services.AddValidatorsFromAssembly(typeof(Program).Assembly);
 
-builder.Services.AddMarten(options =>
+services.AddMarten(options =>
 {
-    options.Connection(builder.Configuration.GetConnectionString("CatalogDb")!);
+    options.Connection(configuration.GetConnectionString("CatalogDb")!);
 }).UseLightweightSessions();
 
-builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+if (environment.IsDevelopment())
+{
+    services.InitializeMartenWith<CatalogInitialData>();
+}
+
+services.AddExceptionHandler<CustomExceptionHandler>();
 
 var app = builder.Build();
 
