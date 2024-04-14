@@ -1,3 +1,4 @@
+using Basket.API.Data;
 using Marten;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,8 @@ services.AddMarten(c =>
     c.Connection(builder.Configuration.GetConnectionString("Database")!);
     c.Schema.For<ShoppingCart>().Identity(x => x.Username);
 }).UseLightweightSessions();
+
+services.AddScoped<IBasketRepository, BasketRepository>();
 
 var app = builder.Build();
 
