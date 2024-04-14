@@ -20,7 +20,20 @@ services.AddMarten(c =>
     c.Schema.For<ShoppingCart>().Identity(x => x.Username);
 }).UseLightweightSessions();
 
+services.AddStackExchangeRedisCache(c =>
+{
+    c.Configuration = builder.Configuration.GetConnectionString("Redis");
+});
+
 services.AddScoped<IBasketRepository, BasketRepository>();
+services.Decorate<IBasketRepository, CachedBasketRepository>();
+
+//Manual decorating
+//services.AddScoped<IBasketRepository>(provider =>
+//{
+//    var basketRepository = provider.GetRequiredService<IBasketRepository>();
+//    return new CachedBasketRepository(basketRepository, provider.GetRequiredService<IDistributedCache>());
+//});
 
 services.AddExceptionHandler<CustomExceptionHandler>();
 
