@@ -13,5 +13,7 @@ builder.Services.AddDbContext<DiscountContext>(o =>
 
 var app = builder.Build();
 
+await app.UseMigration();
+
 app.MapGrpcService<DiscountService>();
 app.Run();
