@@ -1,5 +1,6 @@
 using Basket.API.Data;
 using BuildingBlocks.Exceptions.Handler;
+using Discount.gRPC;
 using HealthChecks.UI.Client;
 using Marten;
 
@@ -38,6 +39,11 @@ services.Decorate<IBasketRepository, CachedBasketRepository>();
 //    var basketRepository = provider.GetRequiredService<IBasketRepository>();
 //    return new CachedBasketRepository(basketRepository, provider.GetRequiredService<IDistributedCache>());
 //});
+
+services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(c =>
+{
+    c.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
+});
 
 services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
