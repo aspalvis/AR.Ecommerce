@@ -43,7 +43,17 @@ services.Decorate<IBasketRepository, CachedBasketRepository>();
 services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(c =>
 {
     c.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
-});
+})
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        //Do not use in production
+        var handler = new HttpClientHandler()
+        {
+            ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+        return handler;
+    });
 
 services.AddHealthChecks()
     .AddNpgSql(databaseConnectionString)
