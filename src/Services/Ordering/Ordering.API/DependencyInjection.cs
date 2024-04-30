@@ -7,9 +7,9 @@
             return services;
         }
 
-        public static IServiceProvider UseApiServices(this IServiceProvider services)
+        public static WebApplication UseApiServices(this WebApplication app)
         {
-            return services;
+            return app;
         }
     }
 }
